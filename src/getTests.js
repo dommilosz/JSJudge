@@ -3,7 +3,7 @@ let url = location.href.split("url=")[1].split('&')[0];
 let tests = [];
 
 async function getHelloWorld(){
-    let data = await (await fetch("/examples/hello_world.test")).json();
+    let data = await (await fetch("../examples/hello_world.test")).json();
     let select = document.querySelector("#selectTest");
     select.innerHTML = "";
     tests.push(...data.tests);
