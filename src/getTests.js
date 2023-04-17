@@ -17,7 +17,6 @@ async function getHelloWorld(){
 
 async function getData(){
     let data = await (await fetch(decodeURIComponent(url))).json();
-    data = JSON.parse(data.contents);
     let select = document.querySelector("#selectTest");
     select.innerHTML = "";
     tests.push(...data.tests);
