@@ -12,15 +12,6 @@ function run_test(code, test) {
         out += `${args}`
     }
 
-    let error = "";
-    try{
-        eval(code);
-    }catch (ex) {
-        error = String(ex);
-    }
-
-    out = out.trim();
-
     let chars = Array.from(code).reduce((prev, curr) => {
         if (curr.charCodeAt(0) > 32 && curr.charCodeAt(0) < 127) {
             return prev + 1;
@@ -28,15 +19,43 @@ function run_test(code, test) {
         return prev;
     }, 0)
 
-    let match = out.match(test.regex);
+    let error = "";
+    try{
+        eval(`${test?.scripts?.pre};\n\n${code}`);
+    }catch (ex) {
+        error = String(ex);
+    }
+
+    out = out.trim();
+
+    try{
+        eval(test?.scripts?.post);
+    }catch (ex) {
+        error = String(ex);
+    }
+
+    let match;
+    let expected = test.regex;
+
+    if(test.regex){
+        match = out.match(test.regex);
+    }else{
+        let correctOut = "";
+        eval(`correctOut=String(${test.scripts.validator})`);
+        expected = correctOut;
+        match = out.trim() === correctOut.trim();
+    }
+
+
+    out = `Your output:\n${out}\nStatus: ${match?"OK":"ERROR"}`
+
     if(!match){
         if(test.example){
-            out = `${out}\nEXAMPLE: \n${test.example}`
+            out = `${out}\nEXAMPLE: \n${example}`
         }
-        out = `${out}\n\nERROR\nEXPECTED: ${test.regex}`
-    }else{
-        out = `${out}\nOK`
+        out = `${out}\n\nERROR\nEXPECTED: ${expected}`
     }
+
     out = `${out}\nCHARS: ${chars}`
     if(error){
         out = `${out}\nERROR: ${error}`
