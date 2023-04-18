@@ -51,8 +51,10 @@ function run() {
     console.log(`Running: test: ${test}`);
 
     let divText = document.getElementById("divOutputText");
+    let inputName = document.getElementById("input_name").value;
+
     let code = g_codeEditor.getValue();
-    let evalCode = run_test(code, tests[test]);
+    let evalCode = run_test(code, tests[test], inputName);
     divText.innerHTML = evalCode;
     divText.style.whiteSpace = "no-wrap"
 }

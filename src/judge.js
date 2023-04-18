@@ -1,4 +1,4 @@
-function run_test(code, test) {
+function run_test(code, test, input_name) {
     let out = "";
 
     console.log2 = console.log;
@@ -20,8 +20,12 @@ function run_test(code, test) {
     }, 0)
 
     let error = "";
+    let input_data;
     try{
-        eval(`${test?.scripts?.pre};\n\n${code}`);
+        let I;
+        eval(test?.scripts?.pre);
+        input_data = I;
+        eval(`let ${input_name}=I;\n${code}`);
     }catch (ex) {
         error = String(ex);
     }
@@ -40,10 +44,11 @@ function run_test(code, test) {
     if(test.regex){
         match = out.match(test.regex);
     }else{
-        let correctOut = "";
-        eval(`correctOut=String(${test.scripts.validator})`);
-        expected = correctOut;
-        match = out.trim() === correctOut.trim();
+        let O = "";
+        let data = input_data
+        eval(`${test.scripts.validator}`);
+        expected = String(O);
+        match = out.trim() === String(O).trim();
     }
 
 
