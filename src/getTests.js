@@ -1,6 +1,6 @@
 let url = location.href.split("url=")[1]?.split('&')[0];
 
-let tests = [];
+export let tests = [];
 
 async function getTestsFromIndex() {
     let data = await (await fetch("tests.index")).text();
@@ -22,10 +22,8 @@ async function getTestsFromUrl(url) {
     })
 }
 
-async function main() {
+export async function getTests() {
     if (url)
         await getTestsFromUrl(decodeURIComponent(url));
     await getTestsFromIndex();
 }
-
-main()

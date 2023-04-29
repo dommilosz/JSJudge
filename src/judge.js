@@ -1,4 +1,4 @@
-function run_test(code, test, input_name) {
+export function run_test(code, test, input_name) {
     let out = "";
 
     console.log2 = console.log;
